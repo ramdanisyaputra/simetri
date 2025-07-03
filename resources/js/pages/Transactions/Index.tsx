@@ -88,6 +88,7 @@ export default function Index({ transactions, accounts, categories, monthlyIncom
     const handleCreate = (e: React.FormEvent) => {
         e.preventDefault();
         router.post(route('transactions.store'), createData, {
+            preserveState: false,
             onSuccess: () => {
                 setCreateModalOpen(false);
                 resetCreate();
@@ -99,6 +100,7 @@ export default function Index({ transactions, accounts, categories, monthlyIncom
         e.preventDefault();
         if (selectedTransaction) {
             router.put(route('transactions.update', selectedTransaction.id), editData, {
+                preserveState: false,
                 onSuccess: () => {
                     setEditModalOpen(false);
                     setSelectedTransaction(null);
@@ -111,6 +113,7 @@ export default function Index({ transactions, accounts, categories, monthlyIncom
     const handleDelete = () => {
         if (selectedTransaction) {
             router.delete(route('transactions.destroy', selectedTransaction.id), {
+                preserveState: false,
                 onSuccess: () => {
                     setDeleteModalOpen(false);
                     setSelectedTransaction(null);
