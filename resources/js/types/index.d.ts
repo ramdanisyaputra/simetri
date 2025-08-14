@@ -55,7 +55,7 @@ export interface Account {
 
 export interface Category {
     id: number;
-    user_id: number;
+    user_id: number | null;
     name: string;
     type: string;
     icon?: string;

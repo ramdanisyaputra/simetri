@@ -24,4 +24,16 @@ class Category extends Model
     {
         return $this->hasMany(Transaction::class);
     }
+
+    // Check if this is a system default category
+    public function isDefault()
+    {
+        return $this->user_id === null;
+    }
+
+    // Check if this is a user-created category
+    public function isUserCategory()
+    {
+        return $this->user_id !== null;
+    }
 }

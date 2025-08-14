@@ -58,6 +58,12 @@ export default function Index({ transactions, accounts, categories, monthlyIncom
         { value: 'expense', label: 'Expense', icon: TrendingDown, color: 'text-red-600' },
     ];
 
+    // Filter categories based on selected transaction type
+    const getFilteredCategories = (type: string) => {
+        if (!type) return [];
+        return categories.filter(category => category.type === type);
+    };
+
     const formatNumberWithDots = (value: string | number): string => {
         const numStr = String(value).replace(/\D/g, ''); // Remove non-digits
         if (!numStr) return '';
@@ -77,6 +83,8 @@ export default function Index({ transactions, accounts, categories, monthlyIncom
         return new Intl.NumberFormat('id-ID', {
             style: 'currency',
             currency: 'IDR',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
         }).format(amount);
     };
 
@@ -146,43 +154,51 @@ export default function Index({ transactions, accounts, categories, monthlyIncom
             
             <div className="space-y-6 m-4">
                 {/* Monthly Summary Cards */}
-                <div className="grid gap-4 md:grid-cols-3">
-                    <Card>
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Income This Month</CardTitle>
-                            <TrendingUp className="h-4 w-4 text-green-600" />
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <Card className="border-green-100 bg-green-50/50">
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+                            <CardTitle className="text-sm font-medium text-green-800">Income This Month</CardTitle>
+                            <div className="p-2 bg-green-100 rounded-full">
+                                <TrendingUp className="h-4 w-4 text-green-600" />
+                            </div>
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold text-green-600">
+                            <div className="text-2xl font-bold text-green-700">
                                 {formatCurrency(monthlyIncome)}
                             </div>
-                            <p className="text-xs text-muted-foreground">{currentMonth}</p>
+                            <p className="text-xs text-green-600 mt-1">{currentMonth}</p>
                         </CardContent>
                     </Card>
                     
-                    <Card>
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Expenses This Month</CardTitle>
-                            <TrendingDown className="h-4 w-4 text-red-600" />
+                    <Card className="border-red-100 bg-red-50/50">
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+                            <CardTitle className="text-sm font-medium text-red-800">Expenses This Month</CardTitle>
+                            <div className="p-2 bg-red-100 rounded-full">
+                                <TrendingDown className="h-4 w-4 text-red-600" />
+                            </div>
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold text-red-600">
+                            <div className="text-2xl font-bold text-red-700">
                                 {formatCurrency(monthlyExpense)}
                             </div>
-                            <p className="text-xs text-muted-foreground">{currentMonth}</p>
+                            <p className="text-xs text-red-600 mt-1">{currentMonth}</p>
                         </CardContent>
                     </Card>
                     
-                    <Card>
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Net Income</CardTitle>
-                            <ArrowUpRight className="h-4 w-4 text-blue-600" />
+                    <Card className={`border-blue-100 ${monthlyIncome - monthlyExpense >= 0 ? 'bg-blue-50/50' : 'bg-orange-50/50'}`}>
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+                            <CardTitle className="text-sm font-medium text-blue-800">Net Income</CardTitle>
+                            <div className={`p-2 rounded-full ${monthlyIncome - monthlyExpense >= 0 ? 'bg-blue-100' : 'bg-orange-100'}`}>
+                                <ArrowUpRight className={`h-4 w-4 ${monthlyIncome - monthlyExpense >= 0 ? 'text-blue-600' : 'text-orange-600'}`} />
+                            </div>
                         </CardHeader>
                         <CardContent>
-                            <div className={`text-2xl font-bold ${monthlyIncome - monthlyExpense >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                            <div className={`text-2xl font-bold ${monthlyIncome - monthlyExpense >= 0 ? 'text-blue-700' : 'text-orange-700'}`}>
                                 {formatCurrency(monthlyIncome - monthlyExpense)}
                             </div>
-                            <p className="text-xs text-muted-foreground">{currentMonth}</p>
+                            <p className={`text-xs mt-1 ${monthlyIncome - monthlyExpense >= 0 ? 'text-blue-600' : 'text-orange-600'}`}>
+                                {currentMonth}
+                            </p>
                         </CardContent>
                     </Card>
                 </div>
@@ -211,7 +227,10 @@ export default function Index({ transactions, accounts, categories, monthlyIncom
                             <form onSubmit={handleCreate} className="space-y-4">
                                 <div>
                                     <Label htmlFor="create-type">Transaction Type</Label>
-                                    <Select value={createData.type} onValueChange={(value) => setCreateData('type', value)}>
+                                    <Select value={createData.type} onValueChange={(value) => {
+                                        setCreateData('type', value);
+                                        setCreateData('category_id', ''); // Reset category when type changes
+                                    }}>
                                         <SelectTrigger>
                                             <SelectValue placeholder="Select transaction type" />
                                         </SelectTrigger>
@@ -248,14 +267,28 @@ export default function Index({ transactions, accounts, categories, monthlyIncom
 
                                 <div>
                                     <Label htmlFor="create-category">Category</Label>
-                                    <Select value={createData.category_id} onValueChange={(value) => setCreateData('category_id', value)}>
+                                    <Select 
+                                        value={createData.category_id} 
+                                        onValueChange={(value) => setCreateData('category_id', value)}
+                                        disabled={!createData.type}
+                                    >
                                         <SelectTrigger>
-                                            <SelectValue placeholder="Select category" />
+                                            <SelectValue placeholder={
+                                                !createData.type 
+                                                    ? "Select transaction type first" 
+                                                    : "Select category"
+                                            } />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            {categories.map((category) => (
+                                            {getFilteredCategories(createData.type).map((category) => (
                                                 <SelectItem key={category.id} value={String(category.id)}>
-                                                    {category.name}
+                                                    <div className="flex items-center gap-2">
+                                                        {category.icon && <span>{category.icon}</span>}
+                                                        {category.name}
+                                                        {category.user_id !== null && (
+                                                            <Badge variant="outline" className="text-xs ml-2">Custom Category</Badge>
+                                                        )}
+                                                    </div>
                                                 </SelectItem>
                                             ))}
                                         </SelectContent>
@@ -268,7 +301,6 @@ export default function Index({ transactions, accounts, categories, monthlyIncom
                                     <Input
                                         id="create-amount"
                                         type="text"
-                                        value={formatNumberWithDots(createData.amount)}
                                         onChange={(e) => handleAmountChange(e.target.value, setCreateData, 'amount')}
                                         placeholder="0"
                                     />
@@ -316,77 +348,141 @@ export default function Index({ transactions, accounts, categories, monthlyIncom
 
                 {/* Transactions List */}
                 {transactions.length === 0 ? (
-                    <Card>
-                        <CardContent className="flex flex-col items-center justify-center py-16">
-                            <div className="text-center">
-                                <Calendar className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
-                                <h3 className="text-lg font-medium">No transactions yet</h3>
-                                <p className="text-muted-foreground mb-4">Start tracking your finances by adding your first transaction.</p>
-                                <Button onClick={() => setCreateModalOpen(true)}>
-                                    <Plus className="mr-2 h-4 w-4" />
-                                    Add Transaction
+                    <Card className="border-dashed">
+                        <CardContent className="flex flex-col items-center justify-center py-24">
+                            <div className="text-center max-w-md">
+                                <div className="mx-auto mb-6 p-4 bg-gray-50 rounded-full w-fit">
+                                    <Calendar className="h-8 w-8 text-muted-foreground" />
+                                </div>
+                                <h3 className="text-xl font-semibold mb-2">No transactions yet</h3>
+                                <p className="text-muted-foreground mb-6 text-sm leading-relaxed">
+                                    Start tracking your finances by recording your first income or expense transaction.
+                                </p>
+                                <Button onClick={() => setCreateModalOpen(true)} size="lg">
+                                    <Plus className="mr-2 h-5 w-5" />
+                                    Add Your First Transaction
                                 </Button>
                             </div>
                         </CardContent>
                     </Card>
                 ) : (
-                    <div className="space-y-4">
-                        {transactions.map((transaction) => {
-                            const typeInfo = getTransactionTypeInfo(transaction.type);
-                            const TypeIcon = typeInfo.icon;
+                    <div className="space-y-6">
+                        <div className="flex items-center justify-between">
+                            <h2 className="text-xl font-semibold text-gray-900">Recent Transactions</h2>
+                            <p className="text-sm text-muted-foreground">{transactions.length} transactions</p>
+                        </div>
+                        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+                            {transactions.map((transaction) => {
+                                const typeInfo = getTransactionTypeInfo(transaction.type);
+                                const TypeIcon = typeInfo.icon;
                             
                             return (
-                                <Card key={transaction.id}>
-                                    <CardContent className="flex items-center justify-between p-6">
-                                        <div className="flex items-center space-x-4">
-                                            <div className={`p-2 rounded-full bg-muted`}>
-                                                <TypeIcon className={`h-4 w-4 ${typeInfo.color}`} />
-                                            </div>
-                                            <div>
-                                                <div className="flex items-center space-x-2">
-                                                    <p className="font-medium">{transaction.category?.name}</p>
-                                                    <Badge variant="outline" className={typeInfo.color}>
-                                                        {typeInfo.label}
-                                                    </Badge>
+                                <Card key={transaction.id} className="hover:shadow-md transition-shadow">
+                                    <CardContent className="p-4">
+                                        {/* Mobile-First Layout */}
+                                        <div className="space-y-3">
+                                            {/* Top Row: Icon, Category, Badge, Actions */}
+                                            <div className="flex items-start justify-between gap-3">
+                                                <div className="flex items-start gap-3 flex-1 min-w-0">
+                                                    <div className={`p-2 rounded-full bg-muted flex-shrink-0`}>
+                                                        <TypeIcon className={`h-4 w-4 ${typeInfo.color}`} />
+                                                    </div>
+                                                    <div className="flex-1 min-w-0">
+                                                        <div className="flex items-center gap-2 flex-wrap">
+                                                            <h3 className="font-semibold text-base text-gray-900">
+                                                                {transaction.category?.name}
+                                                            </h3>
+                                                            <Badge variant="outline" className={`${typeInfo.color} text-xs`}>
+                                                                {typeInfo.label}
+                                                            </Badge>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <p className="text-sm text-muted-foreground">
+                                                
+                                                {/* Action Buttons - Hidden on small screens, shown on larger */}
+                                                <div className="hidden sm:flex space-x-1 flex-shrink-0">
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        onClick={() => openEditModal(transaction)}
+                                                        className="h-8 w-8 p-0 hover:bg-blue-50"
+                                                    >
+                                                        <Edit className="h-4 w-4" />
+                                                    </Button>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        onClick={() => openDeleteModal(transaction)}
+                                                        className="h-8 w-8 p-0 hover:bg-red-50"
+                                                    >
+                                                        <Trash2 className="h-4 w-4" />
+                                                    </Button>
+                                                </div>
+                                            </div>
+
+                                            {/* Amount */}
+                                            <div className="pl-11">
+                                                <div className={`text-xl font-bold ${typeInfo.color}`}>
+                                                    {transaction.type === 'expense' ? '-' : '+'}
+                                                    {formatCurrency(transaction.amount)}
+                                                </div>
+                                            </div>
+
+                                            {/* Account */}
+                                            <div className="pl-11">
+                                                <p className="text-sm text-gray-600">
                                                     {transaction.account?.name}
                                                 </p>
-                                                {transaction.description && (
-                                                    <p className="text-sm text-muted-foreground mt-1">{transaction.description}</p>
-                                                )}
-                                                <p className="text-xs text-muted-foreground">
-                                                    {new Date(transaction.transaction_date).toLocaleDateString()}
-                                                </p>
                                             </div>
-                                        </div>
-                                        
-                                        <div className="flex items-center space-x-4">
-                                            <div className={`text-lg font-bold ${typeInfo.color}`}>
-                                                {transaction.type === 'expense' ? '-' : '+'}
-                                                {formatCurrency(transaction.amount)}
-                                            </div>
-                                            <div className="flex space-x-1">
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    onClick={() => openEditModal(transaction)}
-                                                >
-                                                    <Edit className="h-4 w-4" />
-                                                </Button>
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    onClick={() => openDeleteModal(transaction)}
-                                                >
-                                                    <Trash2 className="h-4 w-4" />
-                                                </Button>
+
+                                            {/* Description (if exists) */}
+                                            {transaction.description && (
+                                                <div className="pl-11">
+                                                    <p className="text-sm text-gray-600 bg-gray-50 p-2 rounded border-l-2 border-gray-300">
+                                                        {transaction.description}
+                                                    </p>
+                                                </div>
+                                            )}
+
+                                            {/* Date and Mobile Actions */}
+                                            <div className="flex items-center justify-between pl-11">
+                                                <div className="flex items-center gap-1 text-sm text-gray-500">
+                                                    <Calendar className="h-4 w-4" />
+                                                    <span>
+                                                        {new Date(transaction.transaction_date).toLocaleDateString('id-ID', {
+                                                            day: 'numeric',
+                                                            month: 'long',
+                                                            year: 'numeric'
+                                                        })}
+                                                    </span>
+                                                </div>
+                                                
+                                                {/* Action Buttons - Shown on small screens only */}
+                                                <div className="flex sm:hidden space-x-1">
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        onClick={() => openEditModal(transaction)}
+                                                        className="h-8 w-8 p-0 hover:bg-blue-50"
+                                                    >
+                                                        <Edit className="h-4 w-4" />
+                                                    </Button>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        onClick={() => openDeleteModal(transaction)}
+                                                        className="h-8 w-8 p-0 hover:bg-red-50"
+                                                    >
+                                                        <Trash2 className="h-4 w-4" />
+                                                    </Button>
+                                                </div>
                                             </div>
                                         </div>
                                     </CardContent>
                                 </Card>
                             );
                         })}
+                        </div>
                     </div>
                 )}
 
@@ -402,7 +498,10 @@ export default function Index({ transactions, accounts, categories, monthlyIncom
                         <form onSubmit={handleEdit} className="space-y-4">
                             <div>
                                 <Label htmlFor="edit-type">Transaction Type</Label>
-                                <Select value={editData.type} onValueChange={(value) => setEditData('type', value)}>
+                                <Select value={editData.type} onValueChange={(value) => {
+                                    setEditData('type', value);
+                                    setEditData('category_id', ''); // Reset category when type changes
+                                }}>
                                     <SelectTrigger>
                                         <SelectValue placeholder="Select transaction type" />
                                     </SelectTrigger>
@@ -439,14 +538,28 @@ export default function Index({ transactions, accounts, categories, monthlyIncom
 
                             <div>
                                 <Label htmlFor="edit-category">Category</Label>
-                                <Select value={editData.category_id} onValueChange={(value) => setEditData('category_id', value)}>
+                                <Select 
+                                    value={editData.category_id} 
+                                    onValueChange={(value) => setEditData('category_id', value)}
+                                    disabled={!editData.type}
+                                >
                                     <SelectTrigger>
-                                        <SelectValue placeholder="Select category" />
+                                        <SelectValue placeholder={
+                                            !editData.type 
+                                                ? "Select transaction type first" 
+                                                : "Select category"
+                                        } />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        {categories.map((category) => (
+                                        {getFilteredCategories(editData.type).map((category) => (
                                             <SelectItem key={category.id} value={String(category.id)}>
-                                                {category.name}
+                                                <div className="flex items-center gap-2">
+                                                    {category.icon && <span>{category.icon}</span>}
+                                                    {category.name}
+                                                    {category.user_id !== null && (
+                                                        <Badge variant="outline" className="text-xs ml-2">Custom Category</Badge>
+                                                    )}
+                                                </div>
                                             </SelectItem>
                                         ))}
                                     </SelectContent>
