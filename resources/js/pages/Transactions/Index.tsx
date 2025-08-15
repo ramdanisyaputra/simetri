@@ -155,48 +155,48 @@ export default function Index({ transactions, accounts, categories, monthlyIncom
             <div className="space-y-6 m-4">
                 {/* Monthly Summary Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <Card className="border-green-100 bg-green-50/50">
+                    <Card className="border-green-200 bg-green-50/50 dark:border-green-800 dark:bg-green-950/30">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-                            <CardTitle className="text-sm font-medium text-green-800">Income This Month</CardTitle>
-                            <div className="p-2 bg-green-100 rounded-full">
-                                <TrendingUp className="h-4 w-4 text-green-600" />
+                            <CardTitle className="text-sm font-medium text-green-800 dark:text-green-300">Income This Month</CardTitle>
+                            <div className="p-2 bg-green-100 dark:bg-green-900 rounded-full">
+                                <TrendingUp className="h-4 w-4 text-green-600 dark:text-green-400" />
                             </div>
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold text-green-700">
+                            <div className="text-2xl font-bold text-green-700 dark:text-green-400">
                                 {formatCurrency(monthlyIncome)}
                             </div>
-                            <p className="text-xs text-green-600 mt-1">{currentMonth}</p>
+                            <p className="text-xs text-green-600 dark:text-green-500 mt-1">{currentMonth}</p>
                         </CardContent>
                     </Card>
                     
-                    <Card className="border-red-100 bg-red-50/50">
+                    <Card className="border-red-200 bg-red-50/50 dark:border-red-800 dark:bg-red-950/30">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-                            <CardTitle className="text-sm font-medium text-red-800">Expenses This Month</CardTitle>
-                            <div className="p-2 bg-red-100 rounded-full">
-                                <TrendingDown className="h-4 w-4 text-red-600" />
+                            <CardTitle className="text-sm font-medium text-red-800 dark:text-red-300">Expenses This Month</CardTitle>
+                            <div className="p-2 bg-red-100 dark:bg-red-900 rounded-full">
+                                <TrendingDown className="h-4 w-4 text-red-600 dark:text-red-400" />
                             </div>
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold text-red-700">
+                            <div className="text-2xl font-bold text-red-700 dark:text-red-400">
                                 {formatCurrency(monthlyExpense)}
                             </div>
-                            <p className="text-xs text-red-600 mt-1">{currentMonth}</p>
+                            <p className="text-xs text-red-600 dark:text-red-500 mt-1">{currentMonth}</p>
                         </CardContent>
                     </Card>
                     
-                    <Card className={`border-blue-100 ${monthlyIncome - monthlyExpense >= 0 ? 'bg-blue-50/50' : 'bg-orange-50/50'}`}>
+                    <Card className={`border-blue-200 dark:border-blue-800 ${monthlyIncome - monthlyExpense >= 0 ? 'bg-blue-50/50 dark:bg-blue-950/30' : 'bg-orange-50/50 dark:bg-orange-950/30'}`}>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-                            <CardTitle className="text-sm font-medium text-blue-800">Net Income</CardTitle>
-                            <div className={`p-2 rounded-full ${monthlyIncome - monthlyExpense >= 0 ? 'bg-blue-100' : 'bg-orange-100'}`}>
-                                <ArrowUpRight className={`h-4 w-4 ${monthlyIncome - monthlyExpense >= 0 ? 'text-blue-600' : 'text-orange-600'}`} />
+                            <CardTitle className="text-sm font-medium text-blue-800 dark:text-blue-300">Net Income</CardTitle>
+                            <div className={`p-2 rounded-full ${monthlyIncome - monthlyExpense >= 0 ? 'bg-blue-100 dark:bg-blue-900' : 'bg-orange-100 dark:bg-orange-900'}`}>
+                                <ArrowUpRight className={`h-4 w-4 ${monthlyIncome - monthlyExpense >= 0 ? 'text-blue-600 dark:text-blue-400' : 'text-orange-600 dark:text-orange-400'}`} />
                             </div>
                         </CardHeader>
                         <CardContent>
-                            <div className={`text-2xl font-bold ${monthlyIncome - monthlyExpense >= 0 ? 'text-blue-700' : 'text-orange-700'}`}>
+                            <div className={`text-2xl font-bold ${monthlyIncome - monthlyExpense >= 0 ? 'text-blue-700 dark:text-blue-400' : 'text-orange-700 dark:text-orange-400'}`}>
                                 {formatCurrency(monthlyIncome - monthlyExpense)}
                             </div>
-                            <p className={`text-xs mt-1 ${monthlyIncome - monthlyExpense >= 0 ? 'text-blue-600' : 'text-orange-600'}`}>
+                            <p className={`text-xs mt-1 ${monthlyIncome - monthlyExpense >= 0 ? 'text-blue-600 dark:text-blue-500' : 'text-orange-600 dark:text-orange-500'}`}>
                                 {currentMonth}
                             </p>
                         </CardContent>
@@ -368,7 +368,7 @@ export default function Index({ transactions, accounts, categories, monthlyIncom
                 ) : (
                     <div className="space-y-6">
                         <div className="flex items-center justify-between">
-                            <h2 className="text-xl font-semibold text-gray-900">Recent Transactions</h2>
+                            <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">Recent Transactions</h2>
                             <p className="text-sm text-muted-foreground">{transactions.length} transactions</p>
                         </div>
                         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
@@ -389,7 +389,7 @@ export default function Index({ transactions, accounts, categories, monthlyIncom
                                                     </div>
                                                     <div className="flex-1 min-w-0">
                                                         <div className="flex items-center gap-2 flex-wrap">
-                                                            <h3 className="font-semibold text-base text-gray-900">
+                                                            <h3 className="font-semibold text-base text-gray-900 dark:text-gray-100">
                                                                 {transaction.category?.name}
                                                             </h3>
                                                             <Badge variant="outline" className={`${typeInfo.color} text-xs`}>
@@ -430,7 +430,7 @@ export default function Index({ transactions, accounts, categories, monthlyIncom
 
                                             {/* Account */}
                                             <div className="pl-11">
-                                                <p className="text-sm text-gray-600">
+                                                <p className="text-sm text-gray-600 dark:text-gray-300">
                                                     {transaction.account?.name}
                                                 </p>
                                             </div>
@@ -438,7 +438,7 @@ export default function Index({ transactions, accounts, categories, monthlyIncom
                                             {/* Description (if exists) */}
                                             {transaction.description && (
                                                 <div className="pl-11">
-                                                    <p className="text-sm text-gray-600 bg-gray-50 p-2 rounded border-l-2 border-gray-300">
+                                                    <p className="text-sm text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-800 p-2 rounded border-l-2 border-gray-300 dark:border-gray-600">
                                                         {transaction.description}
                                                     </p>
                                                 </div>
@@ -446,7 +446,7 @@ export default function Index({ transactions, accounts, categories, monthlyIncom
 
                                             {/* Date and Mobile Actions */}
                                             <div className="flex items-center justify-between pl-11">
-                                                <div className="flex items-center gap-1 text-sm text-gray-500">
+                                                <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
                                                     <Calendar className="h-4 w-4" />
                                                     <span>
                                                         {new Date(transaction.transaction_date).toLocaleDateString('id-ID', {
