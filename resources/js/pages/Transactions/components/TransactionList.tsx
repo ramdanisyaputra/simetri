@@ -27,13 +27,13 @@ export default function TransactionList({
                         <div className="mx-auto mb-6 p-4 bg-gray-50 rounded-full w-fit">
                             <Calendar className="h-8 w-8 text-muted-foreground" />
                         </div>
-                        <h3 className="text-xl font-semibold mb-2">No transactions yet</h3>
+                        <h3 className="text-xl font-semibold mb-2">Belum ada transaksi</h3>
                         <p className="text-muted-foreground mb-6 text-sm leading-relaxed">
-                            Start tracking your finances by recording your first income or expense transaction.
+                            Mulai kelola keuangan Anda dengan mencatat transaksi pemasukan atau pengeluaran pertama.
                         </p>
                         <Button onClick={onCreateNew} size="lg">
                             <Plus className="mr-2 h-5 w-5" />
-                            Add Your First Transaction
+                            Tambah Transaksi Pertama
                         </Button>
                     </div>
                 </CardContent>
@@ -46,11 +46,11 @@ export default function TransactionList({
             {/* Recent Transactions Header with Filter and Add Button */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
-                    <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">Recent Transactions</h2>
-                    <p className="text-sm text-muted-foreground">{transactions.length} transactions</p>
+                    <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">Transaksi Terbaru</h2>
+                    <p className="text-sm text-muted-foreground">{transactions.length} transaksi</p>
                 </div>
                 <Button size="sm" onClick={onCreateNew}>
-                    <Plus className="mr-1 h-4 w-4" /> Add Transaction
+                    <Plus className="mr-1 h-4 w-4" /> Tambah Transaksi
                 </Button>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">

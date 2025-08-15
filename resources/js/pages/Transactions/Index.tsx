@@ -21,7 +21,7 @@ interface Props {
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Transactions',
+        title: 'Transaksi',
         href: '/transactions',
     },
 ];
@@ -53,7 +53,7 @@ export default function Index({ transactions, accounts, categories, monthlyIncom
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Transactions" />
+            <Head title="Transaksi" />
             
             <div className="space-y-6 m-4">
                 {/* Month Filter and Title */}
@@ -72,18 +72,23 @@ export default function Index({ transactions, accounts, categories, monthlyIncom
 
                 {/* Transaction Type Filter */}
                 <div className="flex gap-2 mb-4 overflow-auto">
-                    {['all','income','expense','transfer'].map((type) => (
+                    {[
+                        { key: 'all', label: 'Semua' },
+                        { key: 'income', label: 'Pemasukan' },
+                        { key: 'expense', label: 'Pengeluaran' },
+                        { key: 'transfer', label: 'Transfer' }
+                    ].map((type) => (
                         <button
-                            key={type}
-                            onClick={() => setFilterType(type as any)}
+                            key={type.key}
+                            onClick={() => setFilterType(type.key as any)}
                             className={
                                 `px-3 py-1 rounded-md text-sm font-medium focus:outline-none ` +
-                                (filterType === type
+                                (filterType === type.key
                                     ? 'bg-primary text-primary-foreground'
                                     : 'bg-muted text-foreground hover:bg-accent')
                             }
                         >
-                            {type.charAt(0).toUpperCase() + type.slice(1)}
+                            {type.label}
                         </button>
                     ))}
                 </div>

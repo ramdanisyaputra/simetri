@@ -24,9 +24,9 @@ export default function DeleteAccountDialog({ open, onOpenChange, account }: Del
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-md">
                 <DialogHeader>
-                    <DialogTitle>Delete Account</DialogTitle>
+                    <DialogTitle>Hapus Akun</DialogTitle>
                     <DialogDescription>
-                        Are you sure you want to delete "{account?.name}"? This action cannot be undone.
+                        Apakah Anda yakin ingin menghapus "{account?.name}"? Tindakan ini tidak dapat dibatalkan.
                     </DialogDescription>
                 </DialogHeader>
                 <div className="flex justify-end space-x-2">
@@ -35,14 +35,14 @@ export default function DeleteAccountDialog({ open, onOpenChange, account }: Del
                         variant="outline"
                         onClick={() => onOpenChange(false)}
                     >
-                        Cancel
+                        Batal
                     </Button>
                     <Button
                         type="button"
                         variant="destructive"
                         onClick={handleDelete}
                     >
-                        Delete Account
+                        Hapus Akun
                     </Button>
                 </div>
             </DialogContent>

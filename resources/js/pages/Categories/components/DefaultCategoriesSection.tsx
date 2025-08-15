@@ -8,8 +8,8 @@ interface DefaultCategoriesSectionProps {
 
 export default function DefaultCategoriesSection({ defaultCategories }: DefaultCategoriesSectionProps) {
     const categoryTypes = [
-        { value: 'expense', label: 'Expense', icon: TrendingDown, color: 'text-red-600 bg-red-50 border-red-200' },
-        { value: 'income', label: 'Income', icon: TrendingUp, color: 'text-green-600 bg-green-50 border-green-200' },
+        { value: 'expense', label: 'Pengeluaran', icon: TrendingDown, color: 'text-red-600 bg-red-50 border-red-200' },
+        { value: 'income', label: 'Pemasukan', icon: TrendingUp, color: 'text-green-600 bg-green-50 border-green-200' },
     ];
 
     const groupCategoriesByType = (categories: Category[]) => {
@@ -28,8 +28,8 @@ export default function DefaultCategoriesSection({ defaultCategories }: DefaultC
         <div className="space-y-4">
             <div className="flex items-center gap-2">
                 <Tag className="h-5 w-5" />
-                <h2 className="text-xl font-semibold">Default Categories</h2>
-                <Badge variant="secondary">System</Badge>
+                <h2 className="text-xl font-semibold">Kategori Bawaan</h2>
+                <Badge variant="secondary">Sistem</Badge>
             </div>
             
             <div className="space-y-6">
@@ -43,7 +43,7 @@ export default function DefaultCategoriesSection({ defaultCategories }: DefaultC
                                 <typeInfo.icon className="h-4 w-4" />
                                 <h3 className="text-lg font-medium">{typeInfo.label}</h3>
                                 <div className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ${typeInfo.color}`}>
-                                    {categories.length} categories
+                                    {categories.length} kategori
                                 </div>
                             </div>
                             <div className="flex flex-wrap gap-2">

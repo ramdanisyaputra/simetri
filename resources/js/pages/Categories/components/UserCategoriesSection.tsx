@@ -12,8 +12,8 @@ interface UserCategoriesSectionProps {
 
 export default function UserCategoriesSection({ userCategories, onEdit, onDelete, onCreateNew }: UserCategoriesSectionProps) {
     const categoryTypes = [
-        { value: 'expense', label: 'Expense', icon: TrendingDown, color: 'text-red-600 bg-red-50 border-red-200' },
-        { value: 'income', label: 'Income', icon: TrendingUp, color: 'text-green-600 bg-green-50 border-green-200' },
+        { value: 'expense', label: 'Pengeluaran', icon: TrendingDown, color: 'text-red-600 bg-red-50 border-red-200' },
+        { value: 'income', label: 'Pemasukan', icon: TrendingUp, color: 'text-green-600 bg-green-50 border-green-200' },
     ];
 
     const getCategoryTypeInfo = (type: string) => {
@@ -36,18 +36,18 @@ export default function UserCategoriesSection({ userCategories, onEdit, onDelete
         <div className="space-y-4">
             <div className="flex items-center gap-2">
                 <Tag className="h-5 w-5" />
-                <h2 className="text-xl font-semibold">Your Categories</h2>
+                <h2 className="text-xl font-semibold">Kategori Anda</h2>
             </div>
             
             {userCategories.length === 0 ? (
                 <Card>
                     <CardContent className="flex flex-col items-center justify-center py-16">
                         <div className="text-center">
-                            <h3 className="text-lg font-medium">No custom categories yet</h3>
-                            <p className="text-muted-foreground mb-4">Create your own categories to better organize your transactions.</p>
+                            <h3 className="text-lg font-medium">Belum ada kategori kustom</h3>
+                            <p className="text-muted-foreground mb-4">Buat kategori Anda sendiri untuk mengatur transaksi dengan lebih baik.</p>
                             <Button onClick={onCreateNew}>
                                 <Plus className="mr-2 h-4 w-4" />
-                                Create Category
+                                Buat Kategori
                             </Button>
                         </div>
                     </CardContent>
@@ -63,7 +63,7 @@ export default function UserCategoriesSection({ userCategories, onEdit, onDelete
                                     <typeInfo.icon className="h-4 w-4" />
                                     <h3 className="text-lg font-medium">{typeInfo.label}</h3>
                                     <div className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ${typeInfo.color}`}>
-                                        {categories.length} categories
+                                        {categories.length} kategori
                                     </div>
                                 </div>
                                 <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">

@@ -35,18 +35,18 @@ export default function TransactionFilters({
 
     const generateMonthOptions = () => {
         const months = [
-            { value: '1', label: 'January' },
-            { value: '2', label: 'February' },
-            { value: '3', label: 'March' },
+            { value: '1', label: 'Januari' },
+            { value: '2', label: 'Februari' },
+            { value: '3', label: 'Maret' },
             { value: '4', label: 'April' },
-            { value: '5', label: 'May' },
-            { value: '6', label: 'June' },
-            { value: '7', label: 'July' },
-            { value: '8', label: 'August' },
+            { value: '5', label: 'Mei' },
+            { value: '6', label: 'Juni' },
+            { value: '7', label: 'Juli' },
+            { value: '8', label: 'Agustus' },
             { value: '9', label: 'September' },
-            { value: '10', label: 'October' },
+            { value: '10', label: 'Oktober' },
             { value: '11', label: 'November' },
-            { value: '12', label: 'December' },
+            { value: '12', label: 'Desember' },
         ];
         return months;
     };
@@ -69,18 +69,18 @@ export default function TransactionFilters({
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
                     <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
-                        Transactions - {currentMonth}
+                        Transaksi - {currentMonth}
                     </h1>
-                    <p className="text-muted-foreground">Track your income and expenses</p>
+                    <p className="text-muted-foreground">Kelola pemasukan dan pengeluaran Anda</p>
                 </div>
                 <div className="flex items-center gap-4">
                     <div className="flex items-center gap-2">
                         <Label htmlFor="month-filter" className="text-sm font-medium whitespace-nowrap">
-                            Month:
+                            Bulan:
                         </Label>
                         <Select value={String(selectedMonth)} onValueChange={handleMonthChange}>
                             <SelectTrigger className="w-32">
-                                <SelectValue placeholder="Month" />
+                                <SelectValue placeholder="Bulan" />
                             </SelectTrigger>
                             <SelectContent>
                                 {generateMonthOptions().map((option) => (
@@ -93,11 +93,11 @@ export default function TransactionFilters({
                     </div>
                     <div className="flex items-center gap-2">
                         <Label htmlFor="year-filter" className="text-sm font-medium whitespace-nowrap">
-                            Year:
+                            Tahun:
                         </Label>
                         <Select value={String(selectedYear)} onValueChange={handleYearChange}>
                             <SelectTrigger className="w-24">
-                                <SelectValue placeholder="Year" />
+                                <SelectValue placeholder="Tahun" />
                             </SelectTrigger>
                             <SelectContent>
                                 {generateYearOptions().map((option) => (

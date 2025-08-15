@@ -14,17 +14,17 @@ const mainNavItems: NavItem[] = [
         icon: LayoutGrid,
     },
     {
-        title: 'Accounts',
+        title: 'Akun Keuangan',
         href: '/accounts',
         icon: CreditCard,
     },
     {
-        title: 'Categories',
+        title: 'Kategori',
         href: '/categories',
         icon: Tag,
     },
     {
-        title: 'Transactions',
+        title: 'Transaksi',
         href: '/transactions',
         icon: Receipt,
     },

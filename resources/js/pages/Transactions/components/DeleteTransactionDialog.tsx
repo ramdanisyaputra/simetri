@@ -32,9 +32,9 @@ export default function DeleteTransactionDialog({
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-md">
                 <DialogHeader>
-                    <DialogTitle>Delete Transaction</DialogTitle>
+                                        <DialogTitle>Hapus Transaksi</DialogTitle>
                     <DialogDescription>
-                        Are you sure you want to delete this transaction? This action cannot be undone and will affect your account balance.
+                        Apakah Anda yakin ingin menghapus transaksi "{transaction?.description || 'transaksi ini'}"? Tindakan ini tidak dapat dibatalkan.
                     </DialogDescription>
                 </DialogHeader>
                 <div className="flex justify-end space-x-2">
@@ -43,14 +43,14 @@ export default function DeleteTransactionDialog({
                         variant="outline"
                         onClick={() => onOpenChange(false)}
                     >
-                        Cancel
+                        Batal
                     </Button>
                     <Button
                         type="button"
                         variant="destructive"
                         onClick={handleDelete}
                     >
-                        Delete Transaction
+                        Hapus Transaksi
                     </Button>
                 </div>
             </DialogContent>

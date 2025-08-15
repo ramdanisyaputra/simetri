@@ -17,11 +17,11 @@ export default function AccountsList({ accounts, onEdit, onDelete, onCreateNew }
             <Card>
                 <CardContent className="flex flex-col items-center justify-center py-16">
                     <div className="text-center">
-                        <h3 className="text-lg font-medium">No accounts yet</h3>
-                        <p className="text-muted-foreground mb-4">Get started by creating your first account.</p>
+                        <h3 className="text-lg font-medium">Belum ada akun</h3>
+                        <p className="text-muted-foreground mb-4">Mulai dengan membuat akun pertama Anda.</p>
                         <Button onClick={onCreateNew}>
                             <Plus className="mr-2 h-4 w-4" />
-                            Create Account
+                            Buat Akun
                         </Button>
                     </div>
                 </CardContent>

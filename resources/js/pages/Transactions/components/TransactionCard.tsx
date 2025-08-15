@@ -23,8 +23,8 @@ export default function TransactionCard({ transaction, accounts, onEdit, onDelet
 
     const getTransactionTypeInfo = (type: string) => {
         const transactionTypes = [
-            { value: 'income', label: 'Income', icon: TrendingUp, color: 'text-green-600' },
-            { value: 'expense', label: 'Expense', icon: TrendingDown, color: 'text-red-600' },
+            { value: 'income', label: 'Pemasukan', icon: TrendingUp, color: 'text-green-600' },
+            { value: 'expense', label: 'Pengeluaran', icon: TrendingDown, color: 'text-red-600' },
             { value: 'transfer', label: 'Transfer', icon: ArrowRightLeft, color: 'text-blue-600' },
         ];
         
@@ -91,9 +91,9 @@ export default function TransactionCard({ transaction, accounts, onEdit, onDelet
                     <div className="pl-11">
                         {transaction.type === 'transfer' ? (
                             <p className="text-sm text-gray-600 dark:text-gray-300">
-                                From: <span className="font-medium">{transaction.account?.name}</span>
+                                Dari: <span className="font-medium">{transaction.account?.name}</span>
                                 {transaction.destination_account_id && (
-                                    <> → To: <span className="font-medium">{accounts.find(acc => acc.id === transaction.destination_account_id)?.name}</span></>
+                                    <> → Ke: <span className="font-medium">{accounts.find(acc => acc.id === transaction.destination_account_id)?.name}</span></>
                                 )}
                             </p>
                         ) : (

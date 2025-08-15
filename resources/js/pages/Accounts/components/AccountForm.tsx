@@ -23,12 +23,12 @@ export default function AccountForm({ open, onOpenChange, mode, account }: Accou
     });
 
     const accountTypes = [
-        { value: 'checking', label: 'Checking' },
-        { value: 'savings', label: 'Savings' },
-        { value: 'credit', label: 'Credit Card' },
-        { value: 'investment', label: 'Investment' },
-        { value: 'cash', label: 'Cash' },
-        { value: 'other', label: 'Other' },
+        { value: 'checking', label: 'Rekening Giro' },
+        { value: 'savings', label: 'Tabungan' },
+        { value: 'credit', label: 'Kartu Kredit' },
+        { value: 'investment', label: 'Investasi' },
+        { value: 'cash', label: 'Tunai' },
+        { value: 'other', label: 'Lainnya' },
     ];
 
     // Reset form when opening/closing modal or changing mode
@@ -87,32 +87,32 @@ export default function AccountForm({ open, onOpenChange, mode, account }: Accou
             <DialogContent className="sm:max-w-md">
                 <DialogHeader>
                     <DialogTitle>
-                        {mode === 'create' ? 'Create New Account' : 'Edit Account'}
+                        {mode === 'create' ? 'Buat Akun Baru' : 'Edit Akun'}
                     </DialogTitle>
                     <DialogDescription>
                         {mode === 'create' 
-                            ? 'Add a new financial account to track your money.' 
-                            : 'Update your account information.'
+                            ? 'Tambahkan akun keuangan baru untuk melacak uang Anda.' 
+                            : 'Perbarui informasi akun Anda.'
                         }
                     </DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-                        <Label htmlFor="name">Account Name</Label>
+                        <Label htmlFor="name">Nama Akun</Label>
                         <Input
                             id="name"
                             value={data.name}
                             onChange={(e) => setData('name', e.target.value)}
-                            placeholder="e.g., Chase Checking"
+                            placeholder="mis. BCA Tabungan"
                         />
                         {errors.name && <p className="text-sm text-red-600">{errors.name}</p>}
                     </div>
                     
                     <div>
-                        <Label htmlFor="type">Account Type</Label>
+                        <Label htmlFor="type">Jenis Akun</Label>
                         <Select value={data.type} onValueChange={(value) => setData('type', value)}>
                             <SelectTrigger>
-                                <SelectValue placeholder="Select account type" />
+                                <SelectValue placeholder="Pilih jenis akun" />
                             </SelectTrigger>
                             <SelectContent>
                                 {accountTypes.map((type) => (
@@ -126,7 +126,7 @@ export default function AccountForm({ open, onOpenChange, mode, account }: Accou
                     </div>
                     
                     <div>
-                        <Label htmlFor="balance">Initial Balance</Label>
+                        <Label htmlFor="balance">Saldo Awal</Label>
                         <Input
                             id="balance"
                             type="text"
@@ -143,12 +143,12 @@ export default function AccountForm({ open, onOpenChange, mode, account }: Accou
                             variant="outline"
                             onClick={() => onOpenChange(false)}
                         >
-                            Cancel
+                            Batal
                         </Button>
                         <Button type="submit" disabled={processing}>
                             {processing 
-                                ? (mode === 'create' ? 'Creating...' : 'Updating...') 
-                                : (mode === 'create' ? 'Create Account' : 'Update Account')
+                                ? (mode === 'create' ? 'Membuat...' : 'Memperbarui...') 
+                                : (mode === 'create' ? 'Buat Akun' : 'Perbarui Akun')
                             }
                         </Button>
                     </div>

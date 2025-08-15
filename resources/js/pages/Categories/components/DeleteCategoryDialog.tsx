@@ -24,9 +24,9 @@ export default function DeleteCategoryDialog({ open, onOpenChange, category }: D
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-md">
                 <DialogHeader>
-                    <DialogTitle>Delete Category</DialogTitle>
+                    <DialogTitle>Hapus Kategori</DialogTitle>
                     <DialogDescription>
-                        Are you sure you want to delete "{category?.name}"? This action cannot be undone.
+                        Apakah Anda yakin ingin menghapus "{category?.name}"? Tindakan ini tidak dapat dibatalkan.
                     </DialogDescription>
                 </DialogHeader>
                 <div className="flex justify-end space-x-2">
@@ -35,14 +35,14 @@ export default function DeleteCategoryDialog({ open, onOpenChange, category }: D
                         variant="outline"
                         onClick={() => onOpenChange(false)}
                     >
-                        Cancel
+                        Batal
                     </Button>
                     <Button
                         type="button"
                         variant="destructive"
                         onClick={handleDelete}
                     >
-                        Delete Category
+                        Hapus Kategori
                     </Button>
                 </div>
             </DialogContent>

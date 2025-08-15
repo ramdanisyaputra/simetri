@@ -41,8 +41,8 @@ export default function TransactionForm({
     });
 
     const transactionTypes = [
-        { value: 'income', label: 'Income', icon: TrendingUp, color: 'text-green-600' },
-        { value: 'expense', label: 'Expense', icon: TrendingDown, color: 'text-red-600' },
+        { value: 'income', label: 'Pemasukan', icon: TrendingUp, color: 'text-green-600' },
+        { value: 'expense', label: 'Pengeluaran', icon: TrendingDown, color: 'text-red-600' },
         { value: 'transfer', label: 'Transfer', icon: ArrowRightLeft, color: 'text-blue-600' },
     ];
 
@@ -113,25 +113,25 @@ export default function TransactionForm({
             <DialogContent className="sm:max-w-md">
                 <DialogHeader>
                     <DialogTitle>
-                        {mode === 'create' ? 'Add New Transaction' : 'Edit Transaction'}
+                        {mode === 'create' ? 'Tambah Transaksi Baru' : 'Edit Transaksi'}
                     </DialogTitle>
                     <DialogDescription>
                         {mode === 'create' 
-                            ? 'Record your income, expense, or transfer.' 
-                            : 'Update your transaction information.'
+                            ? 'Catat pemasukan, pengeluaran, atau transfer Anda.' 
+                            : 'Perbarui informasi transaksi Anda.'
                         }
                     </DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-                        <Label htmlFor="type">Transaction Type</Label>
+                        <Label htmlFor="type">Jenis Transaksi</Label>
                         <Select value={data.type} onValueChange={(value) => {
                             setData('type', value);
                             setData('category_id', ''); // Reset category when type changes
                             setData('destination_account_id', ''); // Reset destination account when type changes
                         }}>
                             <SelectTrigger>
-                                <SelectValue placeholder="Select transaction type" />
+                                <SelectValue placeholder="Pilih jenis transaksi" />
                             </SelectTrigger>
                             <SelectContent>
                                 {transactionTypes.map((type) => (
@@ -148,10 +148,10 @@ export default function TransactionForm({
                     </div>
 
                     <div>
-                        <Label htmlFor="account">From Account</Label>
+                        <Label htmlFor="account">Dari Akun</Label>
                         <Select value={data.account_id} onValueChange={(value) => setData('account_id', value)}>
                             <SelectTrigger>
-                                <SelectValue placeholder="Select account" />
+                                <SelectValue placeholder="Pilih akun" />
                             </SelectTrigger>
                             <SelectContent>
                                 {accounts.map((account) => (
@@ -166,10 +166,10 @@ export default function TransactionForm({
 
                     {data.type === 'transfer' && (
                         <div>
-                            <Label htmlFor="destination-account">To Account</Label>
+                            <Label htmlFor="destination-account">Ke Akun</Label>
                             <Select value={data.destination_account_id} onValueChange={(value) => setData('destination_account_id', value)}>
                                 <SelectTrigger>
-                                    <SelectValue placeholder="Select destination account" />
+                                    <SelectValue placeholder="Pilih akun tujuan" />
                                 </SelectTrigger>
                                 <SelectContent>
                                     {accounts.filter(account => String(account.id) !== data.account_id).map((account) => (
@@ -184,7 +184,7 @@ export default function TransactionForm({
                     )}
 
                     <div>
-                        <Label htmlFor="category">Category</Label>
+                        <Label htmlFor="category">Kategori</Label>
                         <Select 
                             value={data.category_id} 
                             onValueChange={(value) => setData('category_id', value)}
@@ -193,10 +193,10 @@ export default function TransactionForm({
                             <SelectTrigger>
                                 <SelectValue placeholder={
                                     data.type === 'transfer'
-                                        ? "Transfers don't require a category"
+                                        ? "Transfer tidak memerlukan kategori"
                                         : !data.type 
-                                            ? "Select transaction type first" 
-                                            : "Select category"
+                                            ? "Pilih jenis transaksi terlebih dahulu" 
+                                            : "Pilih kategori"
                                 } />
                             </SelectTrigger>
                             <SelectContent>
@@ -206,7 +206,7 @@ export default function TransactionForm({
                                             {category.icon && <span>{category.icon}</span>}
                                             {category.name}
                                             {category.user_id !== null && (
-                                                <Badge variant="outline" className="text-xs ml-2">Custom Category</Badge>
+                                                <Badge variant="outline" className="text-xs ml-2">Kategori Kustom</Badge>
                                             )}
                                         </div>
                                     </SelectItem>
@@ -217,7 +217,7 @@ export default function TransactionForm({
                     </div>
 
                     <div>
-                        <Label htmlFor="amount">Amount</Label>
+                        <Label htmlFor="amount">Jumlah</Label>
                         <Input
                             id="amount"
                             type="text"
@@ -229,7 +229,7 @@ export default function TransactionForm({
                     </div>
 
                     <div>
-                        <Label htmlFor="date">Date</Label>
+                        <Label htmlFor="date">Tanggal</Label>
                         <DateInput
                             id="date"
                             value={data.transaction_date}
@@ -239,12 +239,12 @@ export default function TransactionForm({
                     </div>
 
                     <div>
-                        <Label htmlFor="description">Description</Label>
+                        <Label htmlFor="description">Keterangan</Label>
                         <Textarea
                             id="description"
                             value={data.description}
                             onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setData('description', e.target.value)}
-                            placeholder="Optional description..."
+                            placeholder="Keterangan opsional..."
                             rows={3}
                         />
                         {errors.description && <p className="text-sm text-red-600">{errors.description}</p>}
@@ -256,12 +256,12 @@ export default function TransactionForm({
                             variant="outline"
                             onClick={() => onOpenChange(false)}
                         >
-                            Cancel
+                            Batal
                         </Button>
                         <Button type="submit" disabled={processing}>
                             {processing 
-                                ? (mode === 'create' ? 'Adding...' : 'Updating...') 
-                                : (mode === 'create' ? 'Add Transaction' : 'Update Transaction')
+                                ? (mode === 'create' ? 'Menambahkan...' : 'Memperbarui...') 
+                                : (mode === 'create' ? 'Tambah Transaksi' : 'Perbarui Transaksi')
                             }
                         </Button>
                     </div>

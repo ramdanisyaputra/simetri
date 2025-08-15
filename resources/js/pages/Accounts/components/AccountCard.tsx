@@ -11,12 +11,12 @@ interface AccountCardProps {
 
 export default function AccountCard({ account, onEdit, onDelete }: AccountCardProps) {
     const accountTypes = [
-        { value: 'checking', label: 'Checking' },
-        { value: 'savings', label: 'Savings' },
-        { value: 'credit', label: 'Credit Card' },
-        { value: 'investment', label: 'Investment' },
-        { value: 'cash', label: 'Cash' },
-        { value: 'other', label: 'Other' },
+        { value: 'checking', label: 'Rekening Giro' },
+        { value: 'savings', label: 'Tabungan' },
+        { value: 'credit', label: 'Kartu Kredit' },
+        { value: 'investment', label: 'Investasi' },
+        { value: 'cash', label: 'Tunai' },
+        { value: 'other', label: 'Lainnya' },
     ];
 
     const formatCurrency = (amount: number) => {
@@ -64,7 +64,7 @@ export default function AccountCard({ account, onEdit, onDelete }: AccountCardPr
                     {formatCurrency(parseInt(String(account.initial_balance)))}
                 </div>
                 <p className="text-xs text-muted-foreground mt-2">
-                    Created {new Date(account.created_at).toLocaleDateString()}
+                    Dibuat {new Date(account.created_at).toLocaleDateString('id-ID')}
                 </p>
             </CardContent>
         </Card>

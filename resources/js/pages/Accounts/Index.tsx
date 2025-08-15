@@ -13,7 +13,7 @@ interface Props {
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Accounts',
+        title: 'Akun',
         href: '/accounts',
     },
 ];
@@ -40,7 +40,7 @@ export default function Index({ accounts }: Props) {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Accounts" />
+            <Head title="Akun" />
             
             <div className="space-y-6 m-4">
                 {/* Header */}

@@ -23,8 +23,8 @@ export default function CategoryForm({ open, onOpenChange, mode, category }: Cat
     });
 
     const categoryTypes = [
-        { value: 'expense', label: 'Expense', icon: TrendingDown, color: 'text-red-600 bg-red-50 border-red-200' },
-        { value: 'income', label: 'Income', icon: TrendingUp, color: 'text-green-600 bg-green-50 border-green-200' },
+        { value: 'expense', label: 'Pengeluaran', icon: TrendingDown, color: 'text-red-600 bg-red-50 border-red-200' },
+        { value: 'income', label: 'Pemasukan', icon: TrendingUp, color: 'text-green-600 bg-green-50 border-green-200' },
     ];
 
     // Reset form when opening/closing modal or changing mode
@@ -67,32 +67,32 @@ export default function CategoryForm({ open, onOpenChange, mode, category }: Cat
             <DialogContent className="sm:max-w-md">
                 <DialogHeader>
                     <DialogTitle>
-                        {mode === 'create' ? 'Create New Category' : 'Edit Category'}
+                        {mode === 'create' ? 'Buat Kategori Baru' : 'Edit Kategori'}
                     </DialogTitle>
                     <DialogDescription>
                         {mode === 'create' 
-                            ? 'Add a new category to organize your transactions.' 
-                            : 'Update your category information.'
+                            ? 'Tambahkan kategori baru untuk mengatur transaksi Anda.' 
+                            : 'Perbarui informasi kategori Anda.'
                         }
                     </DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-                        <Label htmlFor="name">Category Name</Label>
+                        <Label htmlFor="name">Nama Kategori</Label>
                         <Input
                             id="name"
                             value={data.name}
                             onChange={(e) => setData('name', e.target.value)}
-                            placeholder="e.g., Groceries, Salary"
+                            placeholder="mis. Belanja, Gaji"
                         />
                         {errors.name && <p className="text-sm text-red-600">{errors.name}</p>}
                     </div>
                     
                     <div>
-                        <Label htmlFor="type">Category Type</Label>
+                        <Label htmlFor="type">Jenis Kategori</Label>
                         <Select value={data.type} onValueChange={(value) => setData('type', value)}>
                             <SelectTrigger>
-                                <SelectValue placeholder="Select category type" />
+                                <SelectValue placeholder="Pilih jenis kategori" />
                             </SelectTrigger>
                             <SelectContent>
                                 {categoryTypes.map((type) => (
@@ -109,12 +109,12 @@ export default function CategoryForm({ open, onOpenChange, mode, category }: Cat
                     </div>
                     
                     <div>
-                        <Label htmlFor="icon">Icon (optional)</Label>
+                        <Label htmlFor="icon">Ikon (opsional)</Label>
                         <Input
                             id="icon"
                             value={data.icon}
                             onChange={(e) => setData('icon', e.target.value)}
-                            placeholder="e.g., 🛒, 💰, 🎬"
+                            placeholder="mis. 🛒, 💰, 🎬"
                         />
                         {errors.icon && <p className="text-sm text-red-600">{errors.icon}</p>}
                     </div>
@@ -125,12 +125,12 @@ export default function CategoryForm({ open, onOpenChange, mode, category }: Cat
                             variant="outline"
                             onClick={() => onOpenChange(false)}
                         >
-                            Cancel
+                            Batal
                         </Button>
                         <Button type="submit" disabled={processing}>
                             {processing 
-                                ? (mode === 'create' ? 'Creating...' : 'Updating...') 
-                                : (mode === 'create' ? 'Create Category' : 'Update Category')
+                                ? (mode === 'create' ? 'Membuat...' : 'Memperbarui...') 
+                                : (mode === 'create' ? 'Buat Kategori' : 'Perbarui Kategori')
                             }
                         </Button>
                     </div>
