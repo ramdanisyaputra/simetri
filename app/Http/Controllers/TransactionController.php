@@ -80,11 +80,12 @@ class TransactionController extends Controller
     {
         $request->validate([
             'account_id' => 'required|exists:accounts,id',
-            'category_id' => 'required|exists:categories,id',
+            'category_id' => 'nullable|exists:categories,id',
             'type' => 'required|in:income,expense,transfer',
             'amount' => 'required|numeric|min:0',
             'description' => 'nullable|string|max:255',
             'transaction_date' => 'required|date',
+            'destination_account_id' => 'required_if:type,transfer|nullable|exists:accounts,id|different:account_id',
         ]);
 
         $account = Account::where('id', $request->account_id)
@@ -95,8 +96,19 @@ class TransactionController extends Controller
             abort(403, 'Unauthorized access to this account.');
         }
 
+        // For transfers, validate destination account belongs to user
+        if ($request->type === 'transfer') {
+            $destinationAccount = Account::where('id', $request->destination_account_id)
+                ->where('user_id', Auth::user()->id)
+                ->first();
+
+            if (!$destinationAccount) {
+                abort(403, 'Unauthorized access to destination account.');
+            }
+        }
+
         DB::transaction(function () use ($request) {
-            Transaction::create([
+            $transactionData = [
                 'user_id' => Auth::user()->id,
                 'account_id' => $request->account_id,
                 'category_id' => $request->category_id,
@@ -104,13 +116,25 @@ class TransactionController extends Controller
                 'amount' => $request->amount,
                 'description' => $request->description,
                 'transaction_date' => $request->transaction_date,
-            ]);
+                'destination_account_id' => $request->destination_account_id,
+            ];
 
-            $account = Account::find($request->account_id);
+            Transaction::create($transactionData);
+
+            // Update account balances
+            $sourceAccount = Account::find($request->account_id);
+            
             if ($request->type === 'income') {
-                $account->increment('initial_balance', $request->amount);
+                $sourceAccount->increment('initial_balance', $request->amount);
             } elseif ($request->type === 'expense') {
-                $account->decrement('initial_balance', $request->amount);
+                $sourceAccount->decrement('initial_balance', $request->amount);
+            } elseif ($request->type === 'transfer') {
+                // Decrease from source account
+                $sourceAccount->decrement('initial_balance', $request->amount);
+                
+                // Increase destination account
+                $destinationAccount = Account::find($request->destination_account_id);
+                $destinationAccount->increment('initial_balance', $request->amount);
             }
         });
 
@@ -125,11 +149,12 @@ class TransactionController extends Controller
 
         $request->validate([
             'account_id' => 'required|exists:accounts,id',
-            'category_id' => 'required|exists:categories,id',
+            'category_id' => 'nullable|exists:categories,id',
             'type' => 'required|in:income,expense,transfer',
             'amount' => 'required|numeric|min:0',
             'description' => 'nullable|string|max:255',
             'transaction_date' => 'required|date',
+            'destination_account_id' => 'required_if:type,transfer|nullable|exists:accounts,id|different:account_id',
         ]);
 
         $account = Account::where('id', $request->account_id)
@@ -140,19 +165,42 @@ class TransactionController extends Controller
             abort(403, 'Unauthorized access to this account.');
         }
 
+        // For transfers, validate destination account belongs to user
+        if ($request->type === 'transfer') {
+            $destinationAccount = Account::where('id', $request->destination_account_id)
+                ->where('user_id', Auth::user()->id)
+                ->first();
+
+            if (!$destinationAccount) {
+                abort(403, 'Unauthorized access to destination account.');
+            }
+        }
+
         DB::transaction(function () use ($request, $transaction) {
-            $oldAccount = Account::find($transaction->account_id);
+            // First, reverse the old transaction's effect on account balances
+            $oldSourceAccount = Account::find($transaction->account_id);
             $oldType = $transaction->type;
             $oldAmount = $transaction->amount;
+            $oldDestinationAccountId = $transaction->destination_account_id;
 
-            if ($oldAccount && ($oldAccount->id !== $request->account_id || $oldType !== $request->type)) {
+            if ($oldSourceAccount) {
                 if ($oldType === 'income') {
-                    $oldAccount->decrement('initial_balance', $oldAmount);
+                    $oldSourceAccount->decrement('initial_balance', $oldAmount);
                 } elseif ($oldType === 'expense') {
-                    $oldAccount->increment('initial_balance', $oldAmount);
+                    $oldSourceAccount->increment('initial_balance', $oldAmount);
+                } elseif ($oldType === 'transfer') {
+                    // Reverse the transfer: add back to source, subtract from destination
+                    $oldSourceAccount->increment('initial_balance', $oldAmount);
+                    if ($oldDestinationAccountId) {
+                        $oldDestinationAccount = Account::find($oldDestinationAccountId);
+                        if ($oldDestinationAccount) {
+                            $oldDestinationAccount->decrement('initial_balance', $oldAmount);
+                        }
+                    }
                 }
             }
 
+            // Update the transaction
             $transaction->update([
                 'account_id' => $request->account_id,
                 'category_id' => $request->category_id,
@@ -160,15 +208,24 @@ class TransactionController extends Controller
                 'amount' => $request->amount,
                 'description' => $request->description,
                 'transaction_date' => $request->transaction_date,
+                'destination_account_id' => $request->destination_account_id,
             ]);
 
-            $newAccount = Account::find($request->account_id);
+            // Apply the new transaction's effect on account balances
+            $newSourceAccount = Account::find($request->account_id);
 
-            if ($newAccount) {
+            if ($newSourceAccount) {
                 if ($request->type === 'income') {
-                    $newAccount->increment('initial_balance', $request->amount);
+                    $newSourceAccount->increment('initial_balance', $request->amount);
                 } elseif ($request->type === 'expense') {
-                    $newAccount->decrement('initial_balance', $request->amount);
+                    $newSourceAccount->decrement('initial_balance', $request->amount);
+                } elseif ($request->type === 'transfer') {
+                    // Apply the transfer: subtract from source, add to destination
+                    $newSourceAccount->decrement('initial_balance', $request->amount);
+                    $newDestinationAccount = Account::find($request->destination_account_id);
+                    if ($newDestinationAccount) {
+                        $newDestinationAccount->increment('initial_balance', $request->amount);
+                    }
                 }
             }
         });
@@ -183,11 +240,24 @@ class TransactionController extends Controller
         }
 
         DB::transaction(function () use ($transaction) {
-            $account = Account::find($transaction->account_id);
-            if ($transaction->type === 'income') {
-                $account->decrement('initial_balance', $transaction->amount);
-            } elseif ($transaction->type === 'expense') {
-                $account->increment('initial_balance', $transaction->amount);
+            $sourceAccount = Account::find($transaction->account_id);
+            
+            if ($sourceAccount) {
+                if ($transaction->type === 'income') {
+                    $sourceAccount->decrement('initial_balance', $transaction->amount);
+                } elseif ($transaction->type === 'expense') {
+                    $sourceAccount->increment('initial_balance', $transaction->amount);
+                } elseif ($transaction->type === 'transfer') {
+                    // Reverse the transfer: add back to source, subtract from destination
+                    $sourceAccount->increment('initial_balance', $transaction->amount);
+                    
+                    if ($transaction->destination_account_id) {
+                        $destinationAccount = Account::find($transaction->destination_account_id);
+                        if ($destinationAccount) {
+                            $destinationAccount->decrement('initial_balance', $transaction->amount);
+                        }
+                    }
+                }
             }
 
             $transaction->delete();
