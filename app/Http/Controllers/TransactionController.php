@@ -16,19 +16,34 @@ class TransactionController extends Controller
     public function index(Request $request)
     {
         $userId = Auth::user()->id;
-        $currentMonth = Carbon::now()->format('Y-m');
+        
+        // Get month and year filters from request, default to current month/year
+        $selectedMonth = $request->get('month', Carbon::now()->month);
+        $selectedYear = $request->get('year', Carbon::now()->year);
+        
+        // Ensure we have valid integers
+        $month = (int) $selectedMonth;
+        $year = (int) $selectedYear;
+        
+        // Validate month and year values
+        if ($month < 1 || $month > 12) {
+            $month = Carbon::now()->month;
+        }
+        if ($year < 1900 || $year > 2100) {
+            $year = Carbon::now()->year;
+        }
         
         $transactions = Transaction::with(['account', 'category'])
             ->where('user_id', $userId)
-            ->whereMonth('transaction_date', Carbon::now()->month)
-            ->whereYear('transaction_date', Carbon::now()->year)
+            ->whereMonth('transaction_date', $month)
+            ->whereYear('transaction_date', $year)
             ->orderBy('transaction_date', 'desc')
             ->orderBy('created_at', 'desc')
             ->get();
 
         $monthlyStats = Transaction::where('user_id', $userId)
-            ->whereMonth('transaction_date', Carbon::now()->month)
-            ->whereYear('transaction_date', Carbon::now()->year)
+            ->whereMonth('transaction_date', $month)
+            ->whereYear('transaction_date', $year)
             ->selectRaw('
                 type,
                 SUM(amount) as total_amount
@@ -46,13 +61,18 @@ class TransactionController extends Controller
               ->orWhereNull('user_id');
         })->get();
 
+        // Create a Carbon instance for formatting
+        $dateInstance = Carbon::create($year, $month, 1);
+
         return Inertia::render('Transactions/Index', [
             'transactions' => $transactions,
             'accounts' => $accounts,
             'categories' => $categories,
             'monthlyIncome' => $monthlyIncome,
             'monthlyExpense' => $monthlyExpense,
-            'currentMonth' => $currentMonth,
+            'currentMonth' => $dateInstance->format('F Y'), // Format as "August 2025"
+            'selectedMonth' => $month, // Current selected month number
+            'selectedYear' => $year, // Current selected year
         ]);
     }
 

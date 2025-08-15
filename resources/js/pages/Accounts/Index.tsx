@@ -34,6 +34,13 @@ export default function Index({ accounts }: Props) {
         description: '',
     });
 
+    // Reset create form when opening create modal
+    useEffect(() => {
+        if (createModalOpen) {
+            resetCreate();
+        }
+    }, [createModalOpen]);
+
     const { data: editData, setData: setEditData, put: editPut, processing: editProcessing, errors: editErrors, reset: resetEdit } = useForm({
         name: '',
         type: '',
