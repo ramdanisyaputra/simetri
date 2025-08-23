@@ -9,12 +9,12 @@ import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
     {
-        title: 'Dashboard',
+        title: 'Dasbor',
         href: '/dashboard',
         icon: LayoutGrid,
     },
     {
-        title: 'Akun Keuangan',
+        title: 'Akun',
         href: '/accounts',
         icon: CreditCard,
     },

@@ -1,4 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { formatCurrency } from '@/lib/utils';
 import { ArrowUpRight, TrendingDown, TrendingUp } from 'lucide-react';
 
 interface MonthlySummaryCardsProps {
@@ -8,15 +9,6 @@ interface MonthlySummaryCardsProps {
 }
 
 export default function MonthlySummaryCards({ monthlyIncome, monthlyExpense, currentMonth }: MonthlySummaryCardsProps) {
-    const formatCurrency = (amount: number) => {
-        return new Intl.NumberFormat('id-ID', {
-            style: 'currency',
-            currency: 'IDR',
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0,
-        }).format(amount);
-    };
-
     return (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <Card className="border-green-200 bg-green-50/50 dark:border-green-800 dark:bg-green-950/30">

@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { formatCurrency } from '@/lib/utils';
 import { Edit, Trash2 } from 'lucide-react';
 import { type Account } from '@/types';
 
@@ -18,15 +19,6 @@ export default function AccountCard({ account, onEdit, onDelete }: AccountCardPr
         { value: 'cash', label: 'Tunai' },
         { value: 'other', label: 'Lainnya' },
     ];
-
-    const formatCurrency = (amount: number) => {
-        return new Intl.NumberFormat('id-ID', {
-            style: 'currency',
-            currency: 'IDR',
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0,
-        }).format(amount);
-    };
 
     const getAccountTypeLabel = (type: string) => {
         const accountType = accountTypes.find(t => t.value === type);

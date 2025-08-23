@@ -75,40 +75,24 @@ interface DashboardStats {
 }
 
 interface DashboardProps {
-    summary?: DashboardSummary;
-    accounts?: Account[];
-    recentTransactions?: Transaction[];
-    topCategories?: TopCategory[];
-    dailySpending?: DailySpending[];
-    monthlyTrends?: MonthlyTrend[];
-    stats?: DashboardStats;
+    summary: DashboardSummary;
+    accounts: Account[];
+    recentTransactions: Transaction[];
+    topCategories: TopCategory[];
+    dailySpending: DailySpending[];
+    monthlyTrends: MonthlyTrend[];
+    stats: DashboardStats;
 }
 
 export default function Dashboard({ 
-    summary = {
-        totalBalance: 0,
-        currentMonthIncome: 0,
-        currentMonthExpense: 0,
-        currentMonthNet: 0,
-        incomeGrowth: 0,
-        expenseGrowth: 0,
-        savingsRate: 0,
-        expenseRatio: 0,
-    }, 
-    accounts = [], 
-    recentTransactions = [], 
-    topCategories = [], 
-    dailySpending = [], 
-    monthlyTrends = [], 
-    stats = {
-        totalAccounts: 0,
-        totalCategories: 0,
-        totalTransactions: 0,
-    }
+    summary, 
+    accounts, 
+    recentTransactions, 
+    topCategories, 
+    dailySpending, 
+    monthlyTrends, 
+    stats 
 }: DashboardProps) {
-    // Debug: Log the received props
-    console.log('Dashboard props:', { summary, accounts, recentTransactions, topCategories, dailySpending, monthlyTrends, stats });
-    
     const getAccountTypeLabel = (type: string) => {
         const types: Record<string, string> = {
             checking: 'Rekening Giro',
@@ -226,7 +210,7 @@ export default function Dashboard({
                                 <div>
                                     <CardTitle>Akun Anda</CardTitle>
                                     <CardDescription>
-                                        {stats?.totalAccounts || 0} akun dengan total saldo {formatCurrency(summary?.totalBalance || 0)}
+                                        {stats.totalAccounts} akun dengan total saldo {formatCurrency(summary.totalBalance)}
                                     </CardDescription>
                                 </div>
                                 <Link href="/accounts">
@@ -440,15 +424,15 @@ export default function Dashboard({
                             <CardContent className="space-y-4">
                                 <div className="flex justify-between">
                                     <span className="text-sm text-muted-foreground">Total Akun</span>
-                                    <span className="font-medium">{stats?.totalAccounts || 0}</span>
+                                    <span className="font-medium">{stats.totalAccounts}</span>
                                 </div>
                                 <div className="flex justify-between">
                                     <span className="text-sm text-muted-foreground">Total Kategori</span>
-                                    <span className="font-medium">{stats?.totalCategories || 0}</span>
+                                    <span className="font-medium">{stats.totalCategories}</span>
                                 </div>
                                 <div className="flex justify-between">
                                     <span className="text-sm text-muted-foreground">Transaksi Bulan Ini</span>
-                                    <span className="font-medium">{stats?.totalTransactions || 0}</span>
+                                    <span className="font-medium">{stats.totalTransactions}</span>
                                 </div>
                             </CardContent>
                         </Card>

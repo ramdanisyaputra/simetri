@@ -2,6 +2,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { type Account, type Transaction } from '@/types';
+import { formatCurrency } from '@/lib/utils';
 import { Calendar, Edit, Trash2, TrendingDown, TrendingUp, ArrowRightLeft } from 'lucide-react';
 
 interface TransactionCardProps {
@@ -12,15 +13,6 @@ interface TransactionCardProps {
 }
 
 export default function TransactionCard({ transaction, accounts, onEdit, onDelete }: TransactionCardProps) {
-    const formatCurrency = (amount: number) => {
-        return new Intl.NumberFormat('id-ID', {
-            style: 'currency',
-            currency: 'IDR',
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0,
-        }).format(amount);
-    };
-
     const getTransactionTypeInfo = (type: string) => {
         const transactionTypes = [
             { value: 'income', label: 'Pemasukan', icon: TrendingUp, color: 'text-green-600' },
