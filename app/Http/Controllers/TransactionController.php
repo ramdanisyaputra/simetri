@@ -230,7 +230,7 @@ class TransactionController extends Controller
             }
         });
 
-        return redirect()->route('transactions.index')->with('success', 'Transaction updated successfully.');
+        return redirect()->back()->with('success', 'Transaction updated successfully.');
     }
 
     public function destroy(Transaction $transaction)
@@ -263,6 +263,6 @@ class TransactionController extends Controller
             $transaction->delete();
         });
 
-        return redirect()->route('transactions.index')->with('success', 'Transaction deleted successfully.');
+        return redirect()->back()->with('success', 'Transaction deleted successfully.');
     }
 }
