@@ -143,10 +143,6 @@ class TransactionController extends Controller
 
     public function update(Request $request, Transaction $transaction)
     {
-        if ($transaction->user_id !== Auth::user()->id) {
-            abort(403, 'Unauthorized access to this transaction.');
-        }
-
         $request->validate([
             'account_id' => 'required|exists:accounts,id',
             'category_id' => 'nullable|exists:categories,id',
@@ -235,10 +231,6 @@ class TransactionController extends Controller
 
     public function destroy(Transaction $transaction)
     {
-        if ($transaction->user_id !== Auth::user()->id) {
-            abort(403, 'Unauthorized access to this transaction.');
-        }
-
         DB::transaction(function () use ($transaction) {
             $sourceAccount = Account::find($transaction->account_id);
             

@@ -56,10 +56,6 @@ class AccountController extends Controller
 
     public function update(Request $request, Account $account)
     {
-        if ($account->user_id !== Auth::user()->id) {
-            abort(403, 'Unauthorized access to this account.');
-        }
-
         $request->validate([
             'name' => 'required|string|max:255',
             'type' => 'required|string|max:50',
@@ -79,10 +75,6 @@ class AccountController extends Controller
 
     public function destroy(Account $account)
     {
-        if ($account->user_id !== Auth::user()->id) {
-            abort(403, 'Unauthorized access to this account.');
-        }
-
         $account->delete();
 
         return redirect()->route('accounts.index')->with('success', 'Account deleted successfully.');
