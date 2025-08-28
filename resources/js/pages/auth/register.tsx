@@ -37,7 +37,7 @@ export default function Register() {
             <form className="flex flex-col gap-6" onSubmit={submit}>
                 <div className="grid gap-6">
                     <div className="grid gap-2">
-                        <Label htmlFor="name">Nama</Label>
+                        <Label htmlFor="name" className="text-sm text-gray-200">Nama</Label>
                         <Input
                             id="name"
                             type="text"
@@ -54,7 +54,7 @@ export default function Register() {
                     </div>
 
                     <div className="grid gap-2">
-                        <Label htmlFor="email">Alamat email</Label>
+                        <Label htmlFor="email" className="text-sm text-gray-200">Alamat email</Label>
                         <Input
                             id="email"
                             type="email"
@@ -70,7 +70,7 @@ export default function Register() {
                     </div>
 
                     <div className="grid gap-2">
-                        <Label htmlFor="password">Kata Sandi</Label>
+                        <Label htmlFor="password" className="text-sm text-gray-200">Kata Sandi</Label>
                         <Input
                             id="password"
                             type="password"
@@ -86,7 +86,7 @@ export default function Register() {
                     </div>
 
                     <div className="grid gap-2">
-                        <Label htmlFor="password_confirmation">Konfirmasi kata sandi</Label>
+                        <Label htmlFor="password_confirmation" className="text-sm text-gray-200">Konfirmasi kata sandi</Label>
                         <Input
                             id="password_confirmation"
                             type="password"
@@ -108,8 +108,8 @@ export default function Register() {
                 </div>
 
                 <div className="text-center text-sm text-muted-foreground">
-                    Sudah punya akun?{' '}
-                    <TextLink href={route('login')} tabIndex={6}>
+                    Sudah punya akun?{' '}  
+                    <TextLink href={route('login')} tabIndex={6} className="text-gray-200">
                         Masuk
                     </TextLink>
                 </div>
