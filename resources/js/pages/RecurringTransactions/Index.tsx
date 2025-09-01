@@ -53,6 +53,11 @@ export default function Index({ recurringTransactions, accounts, categories }: R
     const [editModalOpen, setEditModalOpen] = useState(false);
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [selectedRecurringTransaction, setSelectedRecurringTransaction] = useState<RecurringTransaction | null>(null);
+    const [filterType, setFilterType] = useState<'all' | 'income' | 'expense' | 'transfer'>('all');
+
+    const filteredTransactions = filterType === 'all' 
+        ? recurringTransactions 
+        : recurringTransactions.filter(t => t.type === filterType);
 
     const handleCreateSuccess = () => {
         setCreateModalOpen(false);
@@ -261,6 +266,29 @@ export default function Index({ recurringTransactions, accounts, categories }: R
                     </Card>
                 </div>
 
+                {/* Transaction Type Filter */}
+                <div className="flex gap-2 mb-4 overflow-auto">
+                    {[
+                        { key: 'all', label: 'Semua' },
+                        { key: 'income', label: 'Pemasukan' },
+                        { key: 'expense', label: 'Pengeluaran' },
+                        { key: 'transfer', label: 'Transfer' }
+                    ].map((type) => (
+                        <button
+                            key={type.key}
+                            onClick={() => setFilterType(type.key as any)}
+                            className={
+                                `px-3 py-1 rounded-md text-sm font-medium focus:outline-none whitespace-nowrap ` +
+                                (filterType === type.key
+                                    ? 'bg-primary text-primary-foreground'
+                                    : 'bg-muted text-foreground hover:bg-accent')
+                            }
+                        >
+                            {type.label}
+                        </button>
+                    ))}
+                </div>
+
                 {/* Transactions Table */}
                 <Card>
                     <CardHeader>
@@ -270,14 +298,20 @@ export default function Index({ recurringTransactions, accounts, categories }: R
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
-                        {recurringTransactions.length === 0 ? (
+                        {filteredTransactions.length === 0 ? (
                             <div className="flex flex-col items-center justify-center py-12 sm:py-16 text-center">
                                 <CalendarDays className="h-12 w-12 text-gray-400 mb-4" />
                                 <h3 className="text-base sm:text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
-                                    Belum ada transaksi berulang
+                                    {filterType === 'all' 
+                                        ? 'Belum ada transaksi berulang' 
+                                        : `Belum ada transaksi ${filterType === 'income' ? 'pemasukan' : filterType === 'expense' ? 'pengeluaran' : 'transfer'} berulang`
+                                    }
                                 </h3>
                                 <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mb-6 px-4 max-w-md">
-                                    Mulai dengan menambahkan transaksi berulang pertama Anda
+                                    {filterType === 'all' 
+                                        ? 'Mulai dengan menambahkan transaksi berulang pertama Anda'
+                                        : `Belum ada transaksi ${filterType === 'income' ? 'pemasukan' : filterType === 'expense' ? 'pengeluaran' : 'transfer'} berulang`
+                                    }
                                 </p>
                                 <Button onClick={() => setCreateModalOpen(true)} className="w-full sm:w-auto">
                                     <Plus className="mr-2 h-4 w-4" />
@@ -287,7 +321,7 @@ export default function Index({ recurringTransactions, accounts, categories }: R
                             </div>
                         ) : (
                             <div className="space-y-3">
-                                {recurringTransactions.map((transaction) => {
+                                {filteredTransactions.map((transaction) => {
                                     const nextExecution = getNextExecutionDate(transaction);
                                     const isActive = !transaction.end_date || new Date(transaction.end_date) > new Date();
                                     

@@ -181,7 +181,7 @@ export default function RecurringTransactionForm({
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto mx-4 w-[calc(100vw-2rem)] sm:w-full">
+            <DialogContent className="max-h-[90vh] overflow-y-auto w-[95vw] max-w-[95vw] sm:w-full sm:max-w-lg">
                 <DialogHeader>
                     <DialogTitle className="text-lg sm:text-xl">
                         {mode === 'create' ? 'Tambah Transaksi Berulang Baru' : 'Edit Transaksi Berulang'}
