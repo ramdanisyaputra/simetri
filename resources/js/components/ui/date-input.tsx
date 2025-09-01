@@ -14,20 +14,25 @@ interface DateInputProps extends Omit<React.ComponentProps<"input">, "type" | "o
 const DateInput = React.forwardRef<HTMLInputElement, DateInputProps>(
   ({ className, value, onChange, ...props }, ref) => {
     const [selectedDate, setSelectedDate] = React.useState<Date | null>(
-      value ? new Date(value) : null
+      value ? new Date(value + 'T12:00:00') : null
     );
 
     React.useEffect(() => {
       if (value) {
-        setSelectedDate(new Date(value));
+        setSelectedDate(new Date(value + 'T12:00:00'));
+      } else {
+        setSelectedDate(null);
       }
     }, [value]);
 
     const handleDateChange = (date: Date | null) => {
       setSelectedDate(date);
       if (onChange && date) {
-        // Format date as YYYY-MM-DD for HTML date input compatibility
-        const formattedDate = date.toISOString().split('T')[0];
+        // Format date as YYYY-MM-DD avoiding timezone issues
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const formattedDate = `${year}-${month}-${day}`;
         onChange(formattedDate);
       } else if (onChange && !date) {
         onChange('');

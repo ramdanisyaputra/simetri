@@ -1,8 +1,32 @@
 import { type SharedData } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
+import { useEffect } from 'react';
 
 export default function Welcome() {
     const { auth } = usePage<SharedData>().props;
+
+    useEffect(() => {
+        // Intersection Observer for smooth scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fade-in-up');
+                    entry.target.classList.remove('opacity-0', 'translate-y-8');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all elements with scroll-animate class
+        const elementsToAnimate = document.querySelectorAll('.scroll-animate');
+        elementsToAnimate.forEach((el) => observer.observe(el));
+
+        return () => observer.disconnect();
+    }, []);
 
     return (
         <>
@@ -59,7 +83,7 @@ export default function Welcome() {
                 {/* Hero Section */}
                 <section className="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
                     <div className="max-w-7xl mx-auto">
-                        <div className="text-center">
+                        <div className="text-center scroll-animate">
                             <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
                                 <span className="bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent">
                                     Kelola Duit
@@ -97,7 +121,7 @@ export default function Welcome() {
                             </div>
                             
                             {/* Hero Stats */}
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-2xl mx-auto">
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-2xl mx-auto scroll-animate">
                                 <div className="text-center">
                                     <div className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
                                         10K+
@@ -124,7 +148,7 @@ export default function Welcome() {
                 {/* Features Overview Section */}
                 <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-purple-900/20 to-black/40">
                     <div className="max-w-7xl mx-auto">
-                        <div className="text-center mb-16">
+                        <div className="text-center mb-16 scroll-animate">
                             <h2 className="text-3xl sm:text-5xl font-bold mb-6">
                                 <span className="bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent">
                                     Fitur yang Bikin
@@ -141,7 +165,7 @@ export default function Welcome() {
 
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                             {/* Account Management */}
-                            <div className="bg-gradient-to-br from-purple-900/30 to-black/50 p-8 rounded-2xl border border-purple-500/20 hover:border-purple-400/40 transition-all duration-300 group hover:scale-105">
+                            <div className="scroll-animate bg-gradient-to-br from-purple-900/30 to-black/50 p-8 rounded-2xl border border-purple-500/20 hover:border-purple-400/40 transition-all duration-300 group hover:scale-105">
                                 <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                                     <span className="text-2xl">💳</span>
                                 </div>
@@ -157,7 +181,7 @@ export default function Welcome() {
                             </div>
 
                             {/* Transaction Tracking */}
-                            <div className="bg-gradient-to-br from-purple-900/30 to-black/50 p-8 rounded-2xl border border-purple-500/20 hover:border-purple-400/40 transition-all duration-300 group hover:scale-105">
+                            <div className="scroll-animate bg-gradient-to-br from-purple-900/30 to-black/50 p-8 rounded-2xl border border-purple-500/20 hover:border-purple-400/40 transition-all duration-300 group hover:scale-105">
                                 <div className="w-12 h-12 bg-gradient-to-r from-pink-500 to-purple-500 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                                     <span className="text-2xl">📊</span>
                                 </div>
@@ -172,7 +196,7 @@ export default function Welcome() {
                             </div>
 
                             {/* Financial Goals */}
-                            <div className="bg-gradient-to-br from-purple-900/30 to-black/50 p-8 rounded-2xl border border-purple-500/20 hover:border-purple-400/40 transition-all duration-300 group hover:scale-105">
+                            <div className="scroll-animate bg-gradient-to-br from-purple-900/30 to-black/50 p-8 rounded-2xl border border-purple-500/20 hover:border-purple-400/40 transition-all duration-300 group hover:scale-105">
                                 <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-blue-500 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                                     <span className="text-2xl">🎯</span>
                                 </div>
@@ -187,7 +211,7 @@ export default function Welcome() {
                             </div>
 
                             {/* Assets & Investments */}
-                            <div className="bg-gradient-to-br from-purple-900/30 to-black/50 p-8 rounded-2xl border border-purple-500/20 hover:border-purple-400/40 transition-all duration-300 group hover:scale-105">
+                            <div className="scroll-animate bg-gradient-to-br from-purple-900/30 to-black/50 p-8 rounded-2xl border border-purple-500/20 hover:border-purple-400/40 transition-all duration-300 group hover:scale-105">
                                 <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-purple-500 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                                     <span className="text-2xl">💎</span>
                                 </div>
@@ -203,7 +227,7 @@ export default function Welcome() {
                             </div>
 
                             {/* Debt Management */}
-                            <div className="bg-gradient-to-br from-purple-900/30 to-black/50 p-8 rounded-2xl border border-purple-500/20 hover:border-purple-400/40 transition-all duration-300 group hover:scale-105">
+                            <div className="scroll-animate bg-gradient-to-br from-purple-900/30 to-black/50 p-8 rounded-2xl border border-purple-500/20 hover:border-purple-400/40 transition-all duration-300 group hover:scale-105">
                                 <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-purple-500 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                                     <span className="text-2xl">⚠️</span>
                                 </div>
@@ -218,7 +242,7 @@ export default function Welcome() {
                             </div>
 
                             {/* Recurring Transactions */}
-                            <div className="bg-gradient-to-br from-purple-900/30 to-black/50 p-8 rounded-2xl border border-purple-500/20 hover:border-purple-400/40 transition-all duration-300 group hover:scale-105">
+                            <div className="scroll-animate bg-gradient-to-br from-purple-900/30 to-black/50 p-8 rounded-2xl border border-purple-500/20 hover:border-purple-400/40 transition-all duration-300 group hover:scale-105">
                                 <div className="w-12 h-12 bg-gradient-to-r from-yellow-500 to-purple-500 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                                     <span className="text-2xl">🔄</span>
                                 </div>
@@ -240,7 +264,7 @@ export default function Welcome() {
                 <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-black/40 to-purple-900/20">
                     <div className="max-w-7xl mx-auto">
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                            <div>
+                            <div className="scroll-animate">
                                 <div className="mb-6">
                                     <span className="inline-block bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-full text-sm font-medium">
                                         🤖 AI-Powered
@@ -299,7 +323,7 @@ export default function Welcome() {
                                 )}
                             </div>
                             
-                            <div className="relative">
+                            <div className="relative scroll-animate">
                                 {/* Chat Interface Mockup */}
                                 <div className="bg-gradient-to-br from-gray-900 to-black rounded-2xl border border-purple-500/30 p-6 shadow-2xl">
                                     <div className="flex items-center space-x-3 mb-6 pb-4 border-b border-gray-700">
@@ -374,7 +398,7 @@ export default function Welcome() {
                 {/* Testimonials Section */}
                 <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-purple-900/20 to-black/40">
                     <div className="max-w-7xl mx-auto">
-                        <div className="text-center mb-16">
+                        <div className="text-center mb-16 scroll-animate">
                             <div className="mb-6">
                                 <span className="inline-block bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-full text-sm font-medium">
                                     💬 What Gen Z Says
@@ -395,7 +419,7 @@ export default function Welcome() {
                             </p>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 scroll-animate">
                             {/* Testimonial 1 */}
                             <div className="bg-gradient-to-br from-purple-900/30 to-black/50 p-8 rounded-2xl border border-purple-500/20 hover:border-purple-400/40 transition-all duration-300 group">
                                 <div className="flex items-center mb-6">
@@ -520,7 +544,7 @@ export default function Welcome() {
                 </section>
 
                 {/* Financial Education Section */}
-                <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-black/40 to-purple-900/20">
+                <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-black/40 to-purple-900/20 scroll-animate">
                     <div className="max-w-7xl mx-auto">
                         <div className="text-center mb-16">
                             <div className="mb-6">
@@ -696,7 +720,7 @@ export default function Welcome() {
                 {/* Security & Trust Section */}
                 <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-purple-900/20 to-black/40">
                     <div className="max-w-7xl mx-auto">
-                        <div className="text-center mb-16">
+                        <div className="text-center mb-16 scroll-animate">
                             <div className="mb-6">
                                 <span className="inline-block bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-full text-sm font-medium">
                                     🔐 Bank-Level Security
@@ -717,7 +741,7 @@ export default function Welcome() {
                             </p>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16 scroll-animate">
                             {/* Security Feature 1 */}
                             <div className="bg-gradient-to-br from-purple-900/30 to-black/50 p-8 rounded-2xl border border-purple-500/20 hover:border-purple-400/40 transition-all duration-300 group text-center">
                                 <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
@@ -756,7 +780,7 @@ export default function Welcome() {
                         </div>
 
                         {/* Trust Indicators */}
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center scroll-animate">
                             <div>
                                 <h3 className="text-2xl font-bold text-white mb-6">Kenapa Bisa Dipercaya?</h3>
                                 
@@ -793,7 +817,7 @@ export default function Welcome() {
                                 </div>
                             </div>
 
-                            <div className="relative">
+                            <div className="relative scroll-animate">
                                 {/* Security Dashboard Mockup */}
                                 <div className="bg-gradient-to-br from-gray-900 to-black rounded-2xl border border-purple-500/30 p-6 shadow-2xl">
                                     <div className="flex items-center justify-between mb-6">
@@ -856,7 +880,7 @@ export default function Welcome() {
 
                 {/* Final CTA Section */}
                 <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-black/40 to-purple-900/20">
-                    <div className="max-w-4xl mx-auto text-center">
+                    <div className="max-w-4xl mx-auto text-center scroll-animate">
                         <div className="mb-8">
                             <span className="inline-block bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-full text-sm font-medium">
                                 🚀 Ready to Level Up?
